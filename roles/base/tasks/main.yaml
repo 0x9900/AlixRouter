@@ -55,6 +55,18 @@
     group: wheel
     mode: 0644
 
+- name: Configuring the network interfaces
+  copy:
+    src: "hostname.{{ item }}"
+    dest: "/etc/hostname.{{ item }}"
+    owner: root
+    group: wheel
+    mode: 0540
+  with_items:
+    - re0
+    - re1
+    - re2
+
 - name: Generating the ssh banner
   copy:
     src: banner
