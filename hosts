@@ -1,0 +1,17 @@
+#
+# hosts
+#
+
+192.168.10.100
+
+[dev]
+192.168.10.100
+
+[prod]
+192.168.10.100
+
+
+[all:vars]
+ansible_ssh_user=ansible
+ansible_private_key_file=/Users/fred/.ssh/id_ansible_rsa
+ansible_python_interpreter=/usr/local/bin/python

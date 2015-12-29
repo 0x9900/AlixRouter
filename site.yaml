@@ -1,0 +1,19 @@
+#
+# Fred Cirera <fred@bsdhost.net>
+#
+# Home router deployment and management.
+#
+---
+- name: Alix Home Router
+  hosts: all
+  pre_tasks:
+    - shell: /bin/rw
+
+  roles:
+    - { role: base }
+    - { role: pf }
+    - { role: ntpd }
+    - { role: dhcp }
+
+  post_tasks:
+    - shell: /bin/ro

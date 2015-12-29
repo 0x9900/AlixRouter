@@ -1,0 +1,7 @@
+---
+
+- name: start dhcpd
+  service: name=dhcpd state=started
+
+- name: restart dhcpd
+  service: name=dhcpd state=restarted

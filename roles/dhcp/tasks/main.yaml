@@ -1,0 +1,24 @@
+#
+# roles/dhcp
+#
+---
+
+- name: Configure dhcpd.conf file
+  copy:
+    src: dhcpd.conf
+    dest: /etc/dhcpd.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: restart dhcpd
+
+- name: Add dhcpd service to rc.conf.local
+  lineinfile:
+    dest: /etc/rc.conf.local
+    line: 'dhcpd_flags="re1 re2"'
+    regexp: '^dhcpd_flags='
+    backup: yes
+    state: present
+    insertafter: EOF
+    create: True
+  notify: restart dhcpd

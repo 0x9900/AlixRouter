@@ -1,0 +1,17 @@
+#
+# roles/pf/tasks
+#
+
+# Configuring the firewall
+
+---
+
+- name: PF configuration
+  copy:
+    src: "pf.conf"
+    dest: /etc/pf.conf
+    owner: root
+    group: wheel
+    mode: 0600
+    validate: '/sbin/pfctl -nf %s'
+  notify: reload pf

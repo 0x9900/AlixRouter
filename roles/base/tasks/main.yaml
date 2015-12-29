@@ -1,0 +1,88 @@
+#
+# roles/base/tasks
+#
+
+# installing the base system
+
+- name: Disabling sndiod
+  lineinfile:
+    dest: /etc/rc.conf.local
+    regexp: "^#? *sndiod"
+    line: "sndiod_flags=NO"
+    create: True
+    mode: 0644
+    owner: root
+
+- name: Adjust installpath in /etc/pkg.conf
+  lineinfile:
+    dest: /etc/pkg.conf
+    line: "installpath = {{ packages_url }}"
+    regexp: '^installpath'
+    backup: yes
+    state: present
+    insertafter: EOF
+    create: True
+    mode: 0644
+    owner: root
+
+- name: Configuring flashrd tardir
+  lineinfile:
+    dest: /etc/rc.flashrd.sub
+    regexp: '^#?savetardirs'
+    line: "savetardirs=\"$tardirs\""
+
+- name: Configure kernel variables (sysctl.conf)
+  copy:
+    src: sysctl.conf
+    dest: /etc/sysctl.conf
+    owner: root
+    group: wheel
+    mode: 0440
+
+- name: Configure doas
+  copy:
+    src: doas.conf
+    dest: /etc/doas.conf
+    owner: root
+    group: wheel
+    mode: 0440
+
+- name: Configuring newsyslog
+  copy:
+    src: newsyslog.conf
+    dest: /etc/newsyslog.conf
+    owner: root
+    group: wheel
+    mode: 0644
+
+- name: Generating the ssh banner
+  copy:
+    src: banner
+    dest: /etc/banner
+    owner: root
+    group: wheel
+    mode: 0664
+
+- name: Determining localtime is a link
+  stat:
+    path: /etc/localtime
+  register: localtime
+
+- name: Removing local time if not a link
+  file:
+    path: /etc/localtime
+    state: absent
+  when:
+    localtime.stat is defined and localtime.stat.isreg
+
+- name: Setting up the timezone
+  file:
+    src: /usr/share/zoneinfo/PST8PDT
+    dest: /etc/localtime
+    state: link
+
+- name: Install the base packages
+  openbsd_pkg:
+    name: "{{ item }}"
+    state: present
+  with_items: base_packages

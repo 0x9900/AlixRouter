@@ -1,0 +1,22 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- name: Configure ntpd.conf file
+  copy:
+    src: ntpd.conf
+    dest: /etc/ntpd.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: restart ntpd
+
+- name: Add service to rc.conf.local
+  lineinfile:
+    dest: /etc/rc.conf.local
+    line: 'ntpd_flags="-s"'
+    regexp: '^ntpd_flags'
+    backup: yes
+    state: present
+    insertafter: EOF
+    create: True
+  notify: restart ntpd
