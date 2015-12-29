@@ -62,10 +62,7 @@
     owner: root
     group: wheel
     mode: 0540
-  with_items:
-    - re0
-    - re1
-    - re2
+  with_items: interfaces
 
 - name: Generating the ssh banner
   copy:
