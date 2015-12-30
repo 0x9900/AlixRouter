@@ -1,0 +1,79 @@
+#
+# role/unbound
+#
+---
+
+# Creating chroot environment.
+
+- name: creating unbound directory structure
+  file:
+    state: directory
+    path: "{{ item.path }}"
+    mode: "{{ item.mode|default('0755') }}"
+    owner: "{{ item.owner|default('root') }}"
+    group: "{{ item.group|default('wheel') }}"
+  with_items:
+    - { path: "/var/unbound" }
+    - { path: "/var/unbound/etc" }
+    - { path: "/var/unbound/var" }
+    - { path: "/var/unbound/db",
+        mode: "0775",
+        group: "_unbound" }
+    - { path: "/var/unbound/var/run",
+        mode: "0775",
+        owner: "_unbound",
+        group: "_unbound" }
+
+- name: Add service to rc.conf.local
+  lineinfile:
+    dest: /etc/rc.conf.local
+    line: "unbound_flags=\"-c /var/unbound/etc/unbound.conf\""
+    regexp: '^unbound_flags'
+    backup: yes
+    state: present
+    insertafter: EOF
+    create: True
+    mode: 0644
+    owner: root
+    group: wheel
+
+- name: Generating root keys
+  # When root.key does not exist unbound-anchor create it and return
+  # an error.
+  shell: /usr/sbin/unbound-anchor || /usr/bin/true
+         creates=/var/unbound/db/root.key
+  notify: restart unbound
+
+- name: installing root file
+  copy:
+    src: named.root
+    dest: /var/unbound/etc/named.root
+    owner: root
+    group: wheel
+    mode: 0544
+
+- name: Generate control and server keys
+  command: /usr/sbin/unbound-control-setup creates={{ item }}
+  with_items:                   # The order of the items is important.
+    - /var/unbound/etc/unbound_server.key
+    - /var/unbound/etc/unbound_control.key
+    - /var/unbound/etc/unbound_server.pem
+    - /var/unbound/etc/unbound_control.pem
+  notify: restart unbound
+
+- name: Generating config file
+  copy:
+    src: unbound.conf
+    dest: /var/unbound/etc/unbound.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: restart unbound
+
+- name: installing the resolv.conf file
+  copy:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+    owner: root
+    group: wheel
+    mode: 0644
