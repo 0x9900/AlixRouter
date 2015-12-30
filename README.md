@@ -3,5 +3,9 @@ Home Router
 
 My home netowrk has the following topology:
 
-![Network Topology](https://dl.dropboxusercontent.com/u/25332452/HomeNetworkTopology.png)
+![Network Topology](misc/HomeNetworkTopology.png)
 
+All the information concerning the computer I am using for router can
+be found on the [PCEngine website](http://www.pcengines.ch/apu.htm)
+
+![Alix APU](misc/apu1c1.jpg)
