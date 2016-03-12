@@ -62,7 +62,8 @@
     owner: root
     group: wheel
     mode: 0540
-  with_items: interfaces
+  with_items:
+    "{{ interfaces}}"
 
 - name: Generating the ssh banner
   copy:
@@ -94,4 +95,5 @@
   openbsd_pkg:
     name: "{{ item }}"
     state: present
-  with_items: base_packages
+  with_items:
+    "{{ base_packages }}"
