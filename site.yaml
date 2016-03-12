@@ -10,11 +10,12 @@
     - shell: /bin/rw
 
   roles:
-    - { role: base }
-    - { role: pf }
-    - { role: ntpd }
-    - { role: dhcp }
-    - { role: unbound }
+    - { role: base,     tags: base }
+    - { role: pf,       tags: pf }
+    - { role: ntpd,     tags: ntpd }
+    - { role: dhcp,     tags: dhcp }
+    - { role: unbound,  tags: unbound }
+    - { role: sshd,     tags: sshd }
 
   post_tasks:
     - shell: /bin/ro

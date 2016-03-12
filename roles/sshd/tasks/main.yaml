@@ -1,0 +1,13 @@
+#
+# roles/base/tasks
+#
+---
+
+- name: Configuring sshd
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: restart sshd
