@@ -31,14 +31,15 @@ queue std parent rootq bandwidth 25M default
 match in all scrub (no-df random-id reassemble tcp max-mss 1440)
 
 # private network
-match out on egress inet from (private:network) to any nat-to (egress:0)
-match on egress proto tcp from (private:network) to any \
-      port $web_ports set queue (high_bulk, high_prio)
 match on egress proto tcp from (private:network) to any \
       port $ssh_ports set queue (ssh_bulk, ssh_prio)
+match on egress proto tcp from (private:network) to any \
+      port $web_ports set queue (high_bulk, high_prio)
+match out on egress inet from (private:network) to any nat-to (egress:0)
 
 # public network
-match on egress inet from (public:network) to any
+match on egress inet from (public:network) to any \
+      set queue std
 match out on egress inet from (public:network) to any nat-to (egress:0)
 
 
@@ -61,4 +62,4 @@ pass out quick on public from (private:network) to (public:network)
 pass out on egress from (private:network) to any keep state
 pass out on egress from (public:network) to any keep state
 
-pass out inet keep state
+pass out log inet keep state

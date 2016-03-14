@@ -5,3 +5,4 @@
 *.zone.gz
 private-dovecot.pem
 .DS_Store
+site.retry
