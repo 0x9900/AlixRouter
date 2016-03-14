@@ -1,0 +1,64 @@
+#
+# Fred C.
+#
+# To work the interfaces need to be tagged with `private` and `public`
+
+admin_port = {{ ssh_port }}
+bak_port = {{ backup_port }}
+
+ssh_ports = "{ 22, {{ ssh_port }} }"
+web_ports = "{ 80, 443 }"
+icmp_types = "{ echoreq, unreach }"
+
+table <rfc1918> const { 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8 }
+table <vultr> const { {{ vultr|join(', ') }} }
+
+set block-policy drop
+set loginterface egress
+set skip on lo0
+
+antispoof for (egress)
+
+queue rootq on re0 bandwidth 50M max 50M
+queue high parent rootq bandwidth 42M burst 48M for 250ms
+queue  high_prio parent high bandwidth 42M min 15M
+queue  high_bulk parent high bandwidth 40M
+queue ssh parent rootq bandwidth 15M
+queue  ssh_prio parent ssh bandwidth 15M min 10M
+queue  ssh_bulk parent ssh bandwidth 10M
+queue std parent rootq bandwidth 25M default
+
+match in all scrub (no-df random-id reassemble tcp max-mss 1440)
+
+# private network
+match out on egress inet from (private:network) to any nat-to (egress:0)
+match on egress proto tcp from (private:network) to any \
+      port $web_ports set queue (high_bulk, high_prio)
+match on egress proto tcp from (private:network) to any \
+      port $ssh_ports set queue (ssh_bulk, ssh_prio)
+
+# public network
+match on egress inet from (public:network) to any
+match out on egress inet from (public:network) to any nat-to (egress:0)
+
+
+# silently drop broadcasts (cable modem noise)
+block in quick on egress from any to 255.255.255.255
+block in quick from no-route
+block in quick from urpf-failed
+block in quick on egress from { <rfc1918>, <badguys> } to any
+block in quick inet6 all
+
+pass inet proto icmp all icmp-type $icmp_types keep state
+
+pass in quick on egress proto tcp from any to egress port $admin_port
+pass in quick on egress proto tcp from <vultr> to egress \
+     port $bak_port rdr-to 192.168.10.213 port 22
+
+block in quick on public proto tcp from (public:network) to (private:network)
+pass out quick on public from (private:network) to (public:network)
+
+pass out on egress from (private:network) to any keep state
+pass out on egress from (public:network) to any keep state
+
+pass out inet keep state

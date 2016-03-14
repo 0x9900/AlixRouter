@@ -3,6 +3,22 @@
 #
 ---
 
+- name: Install Banner
+  copy:
+    src: banner
+    dest: /etc/banner
+    owner: root
+    group: wheel
+    mode: 0644
+
+- name: Install motd
+  template:
+    src: motd.j2
+    dest: /etc/motd
+    owner: root
+    group: wheel
+    mode: 0644
+
 - name: Configuring sshd
   template:
     src: sshd_config.j2
@@ -11,3 +27,19 @@
     group: wheel
     mode: 0644
   notify: restart sshd
+
+- name: add users
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    comment: "{{ item.gcos }}"
+    groups: wheel
+    state: present
+  with_items: "{{ accounts }}"
+
+- name: Set up authorized_keys for the deploy user
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ lookup('file', 'key-fred.pub') }}"
+  with_items:
+    "{{ accounts }}"

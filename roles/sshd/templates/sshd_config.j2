@@ -4,7 +4,7 @@ Port {{ ssh_port }}
 Protocol 2
 
 # Authentication:
-# AuthenticationMethods	publickey, password
+AuthenticationMethods	publickey,password
 AuthorizedKeysFile	.ssh/authorized_keys
 
 PermitRootLogin no
@@ -15,6 +15,8 @@ ClientAliveInterval 300
 ClientAliveCountMax 3
 
 Banner /etc/banner
+
+Subsystem       sftp    /usr/libexec/sftp-server
 
 Match User ansible
       AuthenticationMethods publickey
