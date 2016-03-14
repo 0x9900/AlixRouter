@@ -18,6 +18,9 @@ Banner /etc/banner
 
 Subsystem       sftp    /usr/libexec/sftp-server
 
+Match address 192.168.10.0/24
+      AuthenticationMethods publickey
+
 Match User ansible
       AuthenticationMethods publickey
       Banner none
