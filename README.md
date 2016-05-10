@@ -24,3 +24,51 @@ All the information concerning the computer I am using for router, can
 be found on the [PCEngine website](http://www.pcengines.ch/)
 
 ![Alix APU](misc/apu1c1.jpg)
+
+
+
+Example of vault.yaml
+---------------------
+
+
+    #
+    # This file contains the secrets.
+    #
+    ---
+
+    ssh_port: 22
+    backup_port: 2022
+
+    # External machines allowed to backup home.
+    vultr:
+      - 64.22.129.57
+      - 64.22.129.58
+
+    accounts:
+      - name: fred
+        gcos: Fred C.
+        password: $2b$08$Bk/DAYTiGmb97UJyoewrM.flpiwru7tnsi2ekeurmdyw395leifh
+
+    home_inventory:
+      airport:
+        ethernet: 80:ea:96:e5:82:1d
+        address: 192.168.10.99
+        comment: Airport Office
+
+      clock:
+        ethernet: 00:1b:21:08:3d:c4
+        address: 192.168.10.202
+        comment: Stratum 1 ntp server
+
+      storage:
+        ethernet: 00:18:8b:16:30:e2
+        address: 192.168.10.213
+
+      raspberrypi:
+        ethernet: b8:27:eb:7f:60:38
+        address: 192.168.10.215
+
+      tivo-ether:
+        ethernet: 00:11:d9:25:d4:85
+        address: 192.168.10.251
+        comment: Livingroom television
