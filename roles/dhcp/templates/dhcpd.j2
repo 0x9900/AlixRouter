@@ -1,0 +1,39 @@
+#	$OpenBSD: dhcpd.conf,v 1.2 2014/07/04 05:38:33 fred Exp $
+#
+# DHCP server options.
+# See dhcpd.conf(5) and dhcpd(8) for more information.
+#
+default-lease-time 86400;	# one day
+max-lease-time 2592000;		# one month
+
+# Home internal private network
+subnet 192.168.10.0 netmask 255.255.255.0 {
+  option subnet-mask 255.255.255.0;
+  option domain-name-servers 192.168.10.1;
+  option routers 192.168.10.1;
+  option domain-name "home";
+  range 192.168.10.100 192.168.10.200;
+  filename "pxeboot";
+  next-server 192.168.10.211;
+
+{% for host, info in home_inventory.iteritems() %}
+  host {{ host }} {
+    hardware ethernet {{ info.ethernet }};
+    fixed-address {{ info.address }};
+  }
+{% endfor %}
+}
+
+# Hone internal guest network
+subnet 192.168.20.0 netmask 255.255.255.0 {
+  option subnet-mask 255.255.255.0;
+  option domain-name-servers 192.168.20.1, 8.8.8.8;
+  option routers 192.168.20.1;
+  range 192.168.20.100 192.168.20.200;
+
+  # WIFI Guest network
+  host BSDGuest {
+    hardware ethernet 68:72:51:44:bc:d7;
+    fixed-address 192.168.20.2;
+  }
+}

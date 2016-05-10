@@ -4,8 +4,8 @@
 ---
 
 - name: Configure dhcpd.conf file
-  copy:
-    src: dhcpd.conf
+  template:
+    src: dhcpd.j2
     dest: /etc/dhcpd.conf
     owner: root
     group: wheel

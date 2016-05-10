@@ -62,12 +62,13 @@
   notify: restart unbound
 
 - name: Generating config file
-  copy:
-    src: unbound.conf
+  template:
+    src: unbound.conf.j2
     dest: /var/unbound/etc/unbound.conf
     owner: root
     group: wheel
     mode: 0644
+    # validate: /usr/sbin/unbound-checkconf %s
   notify: restart unbound
 
 - name: installing the resolv.conf file
