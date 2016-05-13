@@ -27,9 +27,11 @@ server:
 
 	# locally served hostnames
 	local-zone: "home." static
+	local-data: "alixgate.home.	1800 IN A 192.168.10.1"
+	local-data-ptr: "192.168.10.1	alixgate.home"
 {% for host, info in home_inventory.iteritems() %}
 	local-data: "{{ host }}.home.	1800 IN A {{ info.address }}"
-	local-data-ptr: "{{ info.address }} {{ host}}.home"
+	local-data-ptr: "{{ info.address }}	{{ host}}.home"
 {% endfor %}
 
 # Remote control config section.
