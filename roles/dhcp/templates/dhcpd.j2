@@ -14,7 +14,7 @@ subnet 192.168.10.0 netmask 255.255.255.0 {
   option domain-name "home";
   range 192.168.10.100 192.168.10.200;
   filename "pxeboot";
-  next-server 192.168.10.211;
+  next-server 192.168.10.1;
 
 {% for host, info in home_inventory.iteritems() %}
   host {{ host }} {

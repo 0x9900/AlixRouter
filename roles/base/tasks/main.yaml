@@ -13,6 +13,16 @@
     mode: 0644
     owner: root
 
+- name: Enabling tftpd
+  lineinfile:
+    dest: /etc/rc.conf.local
+    regexp: "^#? *tftpd"
+    line: 'tftpd_flags="-l {{ tftpd_interface }} /flash/tftpboot.amd64"'
+    create: True
+    mode: 0644
+    owner: root
+  notify: restart tftpd
+
 - name: Adjust installpath in /etc/pkg.conf
   lineinfile:
     dest: /etc/pkg.conf
