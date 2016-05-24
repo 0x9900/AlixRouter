@@ -5,5 +5,5 @@
 
 - name: restart tftpd
   service:
-    name: ntpd
+    name: tftpd
     state: restarted
