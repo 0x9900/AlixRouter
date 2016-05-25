@@ -7,7 +7,8 @@
 - name: Alix Home Router
   hosts: all
   pre_tasks:
-    - shell: /bin/rw
+    - name: Set flash into read/write mode
+      shell: /bin/rw
 
   roles:
     - { role: base,     tags: base }
@@ -18,4 +19,5 @@
     - { role: sshd,     tags: sshd }
 
   post_tasks:
-    - shell: /bin/ro
+    - name: Set flash into read only mode
+      shell: /bin/ro
