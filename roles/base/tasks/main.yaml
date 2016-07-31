@@ -75,14 +75,6 @@
   with_items:
     "{{ interfaces}}"
 
-- name: Generating the ssh banner
-  copy:
-    src: banner
-    dest: /etc/banner
-    owner: root
-    group: wheel
-    mode: 0664
-
 - name: Determining localtime is a link
   stat:
     path: /etc/localtime

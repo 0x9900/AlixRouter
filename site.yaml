@@ -9,6 +9,7 @@
   pre_tasks:
     - name: Set flash into read/write mode
       shell: /bin/rw
+      changed_when: false
 
   roles:
     - { role: base,     tags: base }
@@ -21,3 +22,4 @@
   post_tasks:
     - name: Set flash into read only mode
       shell: /bin/ro
+      changed_when: false
