@@ -7,9 +7,16 @@
 - name: Alix Home Router
   hosts: all
   pre_tasks:
+    - name: Check if /bin/rw exists
+      stat:
+        path: /etc/localtime
+      register: bin_rw
+
     - name: Set flash into read/write mode
       shell: /bin/rw
       changed_when: false
+      when:
+        bin_rw.stat is defined and bin_rw.stat.isreg
 
   roles:
     - { role: base,     tags: base }
@@ -18,8 +25,11 @@
     - { role: dhcp,     tags: dhcp }
     - { role: unbound,  tags: unbound }
     - { role: sshd,     tags: sshd }
+    - { role: tftp,     tags: tftp }
 
   post_tasks:
     - name: Set flash into read only mode
       shell: /bin/ro
       changed_when: false
+      when:
+        bin_rw.stat is defined and bin_rw.stat.isreg

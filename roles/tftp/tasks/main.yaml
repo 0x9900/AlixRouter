@@ -1,0 +1,42 @@
+#
+# roles/tftp/tasks
+#
+---
+
+- name: Creating the tftp tree
+  file:
+    state: directory
+    path: "{{ item }}"
+    mode: 0755
+    owner: root
+    group: wheel
+  with_items:
+    - "/home/tftpboot.amd64"
+    - "/home/tftpboot.i386"
+
+- name: link to the default os version
+  file:
+    src: /home/tftpboot.amd64
+    dest: /home/tftpboot
+    state: link
+    owner: root
+    group: wheel
+
+- name: Downloading OpenBSD recover kernel.
+  get_url:
+    url: "http://ftp5.usa.OpenBSD.org/pub/OpenBSD/6.0/{{ item[0] }}/{{ item[1] }}"
+    dest: "/home/tftpboot.{{ item[0] }}"
+    mode: 0444
+  with_cartesian:
+    - [ "amd64", "i386" ]
+    - [ "pxeboot", "bsd.rd" ]
+
+- name: Enabling tftpd
+  lineinfile:
+    dest: /etc/rc.conf.local
+    regexp: "^#? *tftpd"
+    line: 'tftpd_flags="-l {{ tftpd_interface }} /home/tftpboot"'
+    create: True
+    mode: 0644
+    owner: root
+  notify: restart tftpd

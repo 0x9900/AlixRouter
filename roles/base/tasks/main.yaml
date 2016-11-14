@@ -1,8 +1,7 @@
 #
 # roles/base/tasks
 #
-
-# installing the base system
+---
 
 - name: Disabling sndiod
   lineinfile:
@@ -13,15 +12,15 @@
     mode: 0644
     owner: root
 
-- name: Enabling tftpd
-  lineinfile:
-    dest: /etc/rc.conf.local
-    regexp: "^#? *tftpd"
-    line: 'tftpd_flags="-l {{ tftpd_interface }} /flash/tftpboot.amd64"'
-    create: True
-    mode: 0644
+- name: Creating home link for flashrd installations
+  file:
+    src: /flash/home
+    dest: /home
+    state: link
     owner: root
-  notify: restart tftpd
+    group: wheel
+  when:
+    bin_rw.stat is defined and bin_rw.stat.isreg
 
 - name: Adjust installpath in /etc/pkg.conf
   lineinfile:
@@ -40,6 +39,8 @@
     dest: /etc/rc.flashrd.sub
     regexp: '^#?savetardirs'
     line: "savetardirs=\"$tardirs\""
+  when:
+    bin_rw.stat is defined and bin_rw.stat.isreg
 
 - name: Configure kernel variables (sysctl.conf)
   copy:

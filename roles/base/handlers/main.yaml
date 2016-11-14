@@ -2,8 +2,3 @@
 # roles/base/handlers
 #
 ---
-
-- name: restart tftpd
-  service:
-    name: tftpd
-    state: restarted
