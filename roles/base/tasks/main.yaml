@@ -76,6 +76,16 @@
   with_items:
     "{{ interfaces}}"
 
+- name: Install dhclient.conf file
+  copy:
+    src: dhclient.conf
+    dest: /etc/dhclient.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify:
+    reload dhclient
+
 - name: Determining localtime is a link
   stat:
     path: /etc/localtime

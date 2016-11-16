@@ -2,3 +2,7 @@
 # roles/base/handlers
 #
 ---
+
+- name: reload dhclient
+  command: /usr/bin/pkill -HUP dhclient
+  ignore_errors: yes
