@@ -13,12 +13,13 @@ packages_url: http://ftp5.usa.openbsd.org/pub/OpenBSD/%c/packages/%a/
 base_packages:
   - bash
   - bzip2
-  - python--
   - curl
   - git
   - ipcalc
   - lsof
   - ngrep
   - py-dns
+  - python--
   - rsync--
   - trafshow
+  - vnstat

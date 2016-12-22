@@ -110,3 +110,12 @@
     state: present
   with_items:
     "{{ base_packages }}"
+
+- name: Configuring vnstatd
+  copy:
+    src: vnstat.conf
+    dest: /etc/vnstat.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: restart vnstatd

@@ -6,3 +6,8 @@
 - name: reload dhclient
   command: /usr/bin/pkill -HUP dhclient
   ignore_errors: yes
+
+- name: restart vnstatd
+  service:
+    name: vnstatd
+    state: restarted
