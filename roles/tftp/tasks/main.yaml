@@ -24,12 +24,12 @@
 
 - name: Downloading OpenBSD recover kernel.
   get_url:
-    url: "http://ftp5.usa.OpenBSD.org/pub/OpenBSD/6.0/{{ item[0] }}/{{ item[1] }}"
-    dest: "/home/tftpboot.{{ item[0] }}"
+    url: "{{ mirror_url }}/{{ item.arch }}/{{ item.file }}"
+    dest: "/home/tftpboot.{{ item.arch }}"
+    checksum: "sha256:{{ item.csum }}"
     mode: 0444
-  with_cartesian:
-    - [ "amd64", "i386" ]
-    - [ "pxeboot", "bsd.rd" ]
+  with_items:
+    "{{ mirror_files }}"
 
 - name: Enabling tftpd
   lineinfile:

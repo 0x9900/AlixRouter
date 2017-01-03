@@ -1,0 +1,24 @@
+#
+# Files mirrord from OpenBSD.org
+#
+mirror_url:  http://ftp5.usa.OpenBSD.org/pub/OpenBSD/6.0
+
+mirror_files:
+  - arch: "amd64"
+    file: "bsd.rd"
+    csum: "167be9b143ee5f9f840a7be33b754fff551de256bcf178ddbce2a28d3e1f76e9"
+  - arch: "amd64"
+    file: "pxeboot"
+    csum: "1ab914961bc447c9f96e1a7055826c36754153da2ef2d3ddbf30182664dbe92a"
+  - arch: "amd64"
+    file: "miniroot60.fs"
+    csum: "a6ff63e72ed9f45a211b0a57fb566e6f674242988e369209cd6b2a205d8bcec1"
+  - arch: "i386"
+    file: "bsd.rd"
+    csum: "76dade28add2a8f019a314e6fbf4867c2d5f29781bd321967d8479a1d819b513"
+  - arch: "i386"
+    file: "pxeboot"
+    csum: "1281917d8bed864753cbf9a19d7085b6e694d43ed4ae70b6ffbfb3d504f6c758"
+  - arch: "i386"
+    file: "miniroot60.fs"
+    csum: "a1dce7d485d6d7d7e2b86ef1a1e550e6ff59ca9fa753e36e66d674599ff6127f"

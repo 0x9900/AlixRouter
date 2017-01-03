@@ -22,7 +22,7 @@ antispoof for (egress)
 block in quick on egress inet6 all
 block return out quick on egress inet6 all
 
-queue rootq on re0 bandwidth 50M max 50M
+queue rootq on egress bandwidth 50M max 50M
 queue high parent rootq bandwidth 42M burst 48M for 250ms
 queue  high_prio parent high bandwidth 42M min 15M
 queue  high_bulk parent high bandwidth 40M
