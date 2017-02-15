@@ -8,8 +8,8 @@
 192.168.10.106
 
 [prod]
-192.168.10.1
-
+#192.168.10.1
+alixgate.home
 
 [all:vars]
 ansible_ssh_user=ansible

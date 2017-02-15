@@ -6,6 +6,8 @@
 admin_port = {{ ssh_port }}
 bak_port = {{ backup_port }}
 
+echolink = "{ 5198, 5199 }"
+
 ssh_ports = "{ 22, {{ ssh_port }} }"
 web_ports = "{ 80, 443 }"
 icmp_types = "{ echoreq, unreach }"
@@ -54,6 +56,10 @@ block in quick on egress from { <rfc1918>, <badguys> } to any
 block in quick inet6 all
 
 pass inet proto icmp all icmp-type $icmp_types keep state
+
+pass in quick on egress proto udp from any to egress \
+     port $echolink rdr-to 192.168.10.101
+
 
 pass in quick on egress proto tcp from any to egress port $admin_port
 pass in quick on egress proto tcp from <vultr> to egress \
