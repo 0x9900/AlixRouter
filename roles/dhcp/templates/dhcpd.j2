@@ -34,7 +34,9 @@ subnet 192.168.20.0 netmask 255.255.255.0 {
 
   # WIFI Guest network
   host BSDGuest {
-    hardware ethernet 68:72:51:44:bc:d7;
+#  old  hardware ethernet 68:72:51:44:bc:d7;
+#  non poe card  hardware ethernet 00:0E:3B:7B:1A:35;
+    hardware ethernet 00:0E:3B:7B:1A:34;
     fixed-address 192.168.20.2;
   }
 }
