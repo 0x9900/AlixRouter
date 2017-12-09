@@ -6,11 +6,12 @@
 admin_port = {{ ssh_port }}
 bak_port = {{ backup_port }}
 
-echolink = "{ 5198, 5199 }"
-
 ssh_ports = "{ 22, {{ ssh_port }} }"
 web_ports = "{ 80, 443 }"
 icmp_types = "{ echoreq, unreach }"
+
+svxlink = "{ 192.168.20.12, 192.168.20.13}"
+udp_echolink = "{ 5198, 5199 }"
 
 table <rfc1918> const { 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8 }
 table <vultr> const { {{ vultr|join(', ') }} }
@@ -26,11 +27,11 @@ block return out quick on egress inet6 all
 
 queue rootq on egress bandwidth 50M max 50M
 queue high parent rootq bandwidth 42M burst 48M for 250ms
-queue  high_prio parent high bandwidth 42M min 15M
-queue  high_bulk parent high bandwidth 40M
+queue high_prio parent high bandwidth 42M min 15M
+queue high_bulk parent high bandwidth 40M
 queue ssh parent rootq bandwidth 15M
-queue  ssh_prio parent ssh bandwidth 15M min 10M
-queue  ssh_bulk parent ssh bandwidth 10M
+queue ssh_prio parent ssh bandwidth 15M min 10M
+queue ssh_bulk parent ssh bandwidth 10M
 queue std parent rootq bandwidth 25M default
 
 match in all scrub (no-df random-id reassemble tcp max-mss 1440)
@@ -47,6 +48,12 @@ match on egress inet from (public:network) to any \
       set queue std
 match out on egress inet from (public:network) to any nat-to (egress:0)
 
+# EchoLink
+pass in quick on egress inet proto udp from any to (egress:0) \
+     port $udp_echolink rdr-to $svxlink
+pass out quick on egress inet proto udp from $svxlink \
+     port $udp_echolink to any keep state
+pass out quick on egress from $svxlink to egress keep state
 
 # silently drop broadcasts (cable modem noise)
 block in quick on egress from any to 255.255.255.255
@@ -58,8 +65,7 @@ block in quick inet6 all
 pass inet proto icmp all icmp-type $icmp_types keep state
 
 pass in quick on egress proto udp from any to egress \
-     port $echolink rdr-to 192.168.10.101
-
+     port $udp_echolink rdr-to 192.168.10.101
 
 pass in quick on egress proto tcp from any to egress port $admin_port
 pass in quick on egress proto tcp from <vultr> to egress \
