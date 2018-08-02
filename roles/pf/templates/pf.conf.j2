@@ -65,7 +65,7 @@ block in quick inet6 all
 pass inet proto icmp all icmp-type $icmp_types keep state
 
 pass in quick on egress proto udp from any to egress \
-     port $udp_echolink rdr-to 192.168.10.101
+     port $udp_echolink rdr-to 192.168.20.12
 
 pass in quick on egress proto tcp from any to egress port $admin_port
 pass in quick on egress proto tcp from <vultr> to egress \
