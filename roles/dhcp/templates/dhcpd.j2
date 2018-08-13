@@ -38,7 +38,7 @@ subnet 192.168.20.0 netmask 255.255.255.0 {
     fixed-address 192.168.20.2;
   }
   host w6bsd {
-    hardware ethernet b8:27:eb:09:80:83;
+    hardware ethernet 10:0d:7f:b3:27:26;
     fixed-address 192.168.20.12;
   }
   host openspot {
@@ -46,6 +46,7 @@ subnet 192.168.20.0 netmask 255.255.255.0 {
     fixed-address 192.168.20.20;
   }
   host jumbospot {
+#    hardware ethernet b8:27:eb:eb:15:12;
     hardware ethernet b8:27:eb:ee:19:6c;
     fixed-address 192.168.20.21;
   }
