@@ -10,10 +10,7 @@ ssh_ports = "{ 22, {{ ssh_port }} }"
 web_ports = "{ 80, 443 }"
 icmp_types = "{ echoreq, unreach }"
 
-svxlink = "{ 192.168.20.12, 192.168.20.13, 192.168.10.115}"
-udp_echolink = "{ 5100:65200 }"
-# udp_echolink = "{ 5198, 5199, 8880, 20001, 30051, 30062, 30062, 42000, \
-# 42000, 62030, 62500, 65100, 65200 }"
+allstar_ports = 4569
 
 table <rfc1918> const { 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8 }
 table <vultr> const { {{ vultr|join(', ') }} }
@@ -50,23 +47,14 @@ match on egress inet from (public:network) to any \
       set queue std
 match out on egress inet from (public:network) to any nat-to (egress:0)
 
-# EchoLink
-pass in quick on egress inet proto udp from any to (egress:0) \
-     port $udp_echolink rdr-to $svxlink
-pass out quick on egress inet proto udp from $svxlink \
-     port $udp_echolink to any keep state
-
 # silently drop broadcasts (cable modem noise)
 block in quick on egress from any to 255.255.255.255
 block in quick from no-route
 block in quick from urpf-failed
-block in quick on egress from { <rfc1918>, <badguys> } to any
+block in quick on egress from { <rfc1918> } to any
 block in quick inet6 all
 
 pass inet proto icmp all icmp-type $icmp_types keep state
-
-pass in quick on egress proto udp from any to egress \
-     port $udp_echolink rdr-to 192.168.20.12
 
 pass in quick on egress proto tcp from any to egress port $admin_port
 pass in quick on egress proto tcp from <vultr> to egress \
@@ -74,6 +62,9 @@ pass in quick on egress proto tcp from <vultr> to egress \
 
 block in quick on public proto tcp from (public:network) to (private:network)
 pass out quick on public from (private:network) to (public:network)
+
+pass in quick on egress proto udp from any to egress \
+     port $allstar_port rdr-to 192.168.20.149 port $allstar_port
 
 pass out on egress from (private:network) to any keep state
 pass out on egress from (public:network) to any keep state
