@@ -106,10 +106,8 @@
 
 - name: Install the base packages
   openbsd_pkg:
-    name: "{{ item }}"
+    name: "{{ base_packages }}"
     state: present
-  with_items:
-    "{{ base_packages }}"
 
 - name: Configuring vnstatd
   copy:
