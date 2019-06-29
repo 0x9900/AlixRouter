@@ -27,17 +27,21 @@ server:
 
 	# locally served hostnames
 	local-zone: "home." static
+
 	local-data: "alixgate.home.	1800 IN A 192.168.10.1"
 	local-data-ptr: "192.168.10.1	alixgate.home"
-	{% for host, info in home_inventory.iteritems() %}
-	local-data: "{{ host }}.home.	1800 IN A {{ info.address }}"
-	local-data-ptr: "{{ info.address }}	{{ host}}.home"
-	{% endfor %}
 
-	{% for host, info in guest_inventory.iteritems() %}
+{% for host, info in home_inventory.iteritems() %}
 	local-data: "{{ host }}.home.	1800 IN A {{ info.address }}"
-	local-data-ptr: "{{ info.address }}	{{ host}}.home"
-	{% endfor %}
+	local-data-ptr: "{{ info.address }}	{{ host }}.home"
+
+{% endfor %}
+
+{% for host, info in guest_inventory.iteritems() %}
+	local-data: "{{ host }}.home.	1800 IN A {{ info.address }}"
+	local-data-ptr: "{{ info.address }}	{{ host }}.home"
+
+{% endfor %}
 
 # Remote control config section.
 remote-control:
@@ -52,7 +56,7 @@ remote-control:
 	server-cert-file: "/var/unbound/etc/unbound_server.pem"
 
 forward-zone:
-        name: "."
-        forward-addr: 8.8.4.4		# Google Public DNS #2
-        forward-addr: 74.82.42.42	# Hurricane Electric
-        forward-addr: 8.8.8.8		# Google Public DNS
+	name: "."
+	forward-addr: 8.8.4.4		# Google Public DNS #2
+	forward-addr: 74.82.42.42	# Hurricane Electric
+	forward-addr: 8.8.8.8		# Google Public DNS
