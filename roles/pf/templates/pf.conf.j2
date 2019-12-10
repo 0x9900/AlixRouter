@@ -10,18 +10,6 @@ ssh_ports = "{ 22, {{ ssh_port }} }"
 web_ports = "{ 80, 443 }"
 icmp_types = "{ echoreq, unreach }"
 
-echolink_node = "{ 192.168.20.24 }"
-echolink_port_udp = "{ 5198, 5199 }"
-echolink_port_tcp = "{ 5100 }"
-
-# Allstar
-allstar_node1 = "{ 192.168.20.23 }"
-allstar_port1 = "{ 4569 }"
-
-# EchoStar
-allstar_node2 = "{ 192.168.20.24 }"
-allstar_port2 = "{ 4568 }"
-
 table <rfc1918> const { 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8 }
 table <vultr> const { {{ vultr|join(', ') }} }
 
@@ -56,18 +44,6 @@ match out on egress inet from (private:network) to any nat-to (egress:0)
 match on egress inet from (public:network) to any \
       set queue std
 match out on egress inet from (public:network) to any nat-to (egress:0)
-
-# EchoLink
-pass in quick on egress proto udp from any to egress \
-     port $echolink_port_udp rdr-to $echolink_node
-pass in quick on egress proto tcp from any to egress \
-     port $echolink_port_tcp rdr-to $echolink_node
-
-# AllStar nodes
-pass in quick on egress inet proto udp from any to (egress:0) \
-     port $allstar_port1 rdr-to $allstar_node1
-pass in quick on egress inet proto udp from any to (egress:0) \
-     port $allstar_port2 rdr-to $allstar_node2
 
 # silently drop broadcasts (cable modem noise)
 block in quick on egress from any to 255.255.255.255
