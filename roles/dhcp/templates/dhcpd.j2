@@ -32,10 +32,10 @@ subnet 192.168.20.0 netmask 255.255.255.0 {
   option routers 192.168.20.1;
   range 192.168.20.100 192.168.20.200;
 
-  {% for host, info in guest_inventory.iteritems() %}
-    host {{ host }} {
-      hardware ethernet {{ info.ethernet }};
-      fixed-address {{ info.address }};
-    }
-  {% endfor %}
+{% for host, info in guest_inventory.iteritems() %}
+  host {{ host }} {
+    hardware ethernet {{ info.ethernet }};
+    fixed-address {{ info.address }};
+  }
+{% endfor %}
 }
