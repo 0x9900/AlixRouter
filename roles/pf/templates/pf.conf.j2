@@ -14,13 +14,13 @@ echolink_node = "{ 192.168.20.24 }"
 echolink_port_udp = "{ 5198, 5199 }"
 echolink_port_tcp = "{ 5100 }"
 
-# Allstar
-allstar_node1 = "{ 192.168.20.23 }"
-allstar_port1 = "{ 4569 }"
-
 # EchoStar
-allstar_node2 = "{ 192.168.20.24 }"
+allstar_node2 = "{ 192.168.10.205 }"
 allstar_port2 = "{ 4568 }"
+
+# Allstar
+allstar_node1 = "{ 192.168.10.206 }"
+allstar_port1 = "{ 4569 }"
 
 table <rfc1918> const { 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8 }
 table <vultr> const { {{ vultr|join(', ') }} }
