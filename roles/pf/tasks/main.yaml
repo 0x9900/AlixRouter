@@ -6,6 +6,20 @@
 
 ---
 
+- stat:
+    path: /var/db/badguys.txt
+  register: st_badguys
+
+- name: Creating empty file lists for pf
+  file:
+    path: /var/db/badguys.txt
+    state: touch
+    owner: root
+    group: wheel
+    mode: 0644
+  when: st_badguys.stat.exists is defined and st_badguys.stat.exists == False
+  notify: reload pf
+
 - name: PF configuration
   template:
     src: "pf.conf.j2"

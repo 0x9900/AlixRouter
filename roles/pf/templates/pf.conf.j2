@@ -23,6 +23,7 @@ allstar_node1 = "{ 192.168.10.206 }"
 allstar_port1 = "{ 4569 }"
 
 table <rfc1918> const { 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8 }
+table <badguys> persist file "/var/db/badguys.txt"
 table <vultr> const { {{ vultr|join(', ') }} }
 
 set block-policy drop
@@ -70,10 +71,10 @@ pass in quick on egress inet proto udp from any to (egress:0) \
      port $allstar_port2 rdr-to $allstar_node2
 
 # silently drop broadcasts (cable modem noise)
+block quick on egress from { <rfc1918>, <badguys> } to any
 block in quick on egress from any to 255.255.255.255
 block in quick from no-route
 block in quick from urpf-failed
-block in quick on egress from { <rfc1918> } to any
 block in quick inet6 all
 
 pass inet proto icmp all icmp-type $icmp_types keep state
