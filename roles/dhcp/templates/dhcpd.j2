@@ -24,18 +24,3 @@ subnet 192.168.10.0 netmask 255.255.255.0 {
   }
 {% endfor %}
 }
-
-# Hone internal guest network
-subnet 192.168.20.0 netmask 255.255.255.0 {
-  option subnet-mask 255.255.255.0;
-  option domain-name-servers 192.168.20.1, 8.8.8.8;
-  option routers 192.168.20.1;
-  range 192.168.20.100 192.168.20.200;
-
-{% for host, info in guest_inventory.iteritems() %}
-  host {{ host }} {
-    hardware ethernet {{ info.ethernet }};
-    fixed-address {{ info.address }};
-  }
-{% endfor %}
-}

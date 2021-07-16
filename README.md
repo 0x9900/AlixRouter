@@ -3,8 +3,6 @@ Home Router
 
 My home netowrk router is an Alix
 [APU box](http://www.pcengines.ch/apu.htm) running
-[OpenBSD](http://OpenBSD.org/) The flash image was created using
-[flashrd](http://www.nmedia.net/flashrd/).
 
 My home network has two networks. A private network and a Guest Netwok.
 

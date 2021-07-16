@@ -6,7 +6,6 @@
 interfaces:
   - re0
   - re1
-  - re2
 
 packages_url: http://ftp5.usa.openbsd.org/pub/OpenBSD/%c/packages/%a/
 
@@ -16,10 +15,11 @@ base_packages:
   - curl
   - git
   - ipcalc
-  - lsof
   - ngrep
   - py-dns
   - python--
   - rsync--
   - trafshow
   - vnstat
+
+# - lsof

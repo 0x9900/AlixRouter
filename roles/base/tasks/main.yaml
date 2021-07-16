@@ -12,16 +12,6 @@
     mode: 0644
     owner: root
 
-- name: Creating home link for flashrd installations
-  file:
-    src: /flash/home
-    dest: /home
-    state: link
-    owner: root
-    group: wheel
-  when:
-    bin_rw.stat is defined and bin_rw.stat.isreg
-
 - name: Adjust installpath in /etc/pkg.conf
   lineinfile:
     dest: /etc/pkg.conf
@@ -33,14 +23,6 @@
     create: True
     mode: 0644
     owner: root
-
-- name: Configuring flashrd tardir
-  lineinfile:
-    dest: /etc/rc.flashrd.sub
-    regexp: '^#?savetardirs'
-    line: "savetardirs=\"$tardirs\""
-  when:
-    bin_rw.stat is defined and bin_rw.stat.isreg
 
 - name: Configure kernel variables (sysctl.conf)
   copy:

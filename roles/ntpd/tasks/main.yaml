@@ -13,7 +13,7 @@
 - name: Add service to rc.conf.local
   lineinfile:
     dest: /etc/rc.conf.local
-    line: 'ntpd_flags="-s"'
+    line: 'ntpd_flags='
     regexp: '^ntpd_flags'
     backup: yes
     state: present

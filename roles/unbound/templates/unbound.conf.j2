@@ -8,14 +8,12 @@ server:
 	statistics-cumulative: yes
 	interface: 127.0.0.1
 	interface: 192.168.10.1
-	interface: 192.168.20.1
 
 	do-ip4: yes
 	do-ip6: no
 
 	access-control: 127.0.0.1/8 allow
 	access-control: 192.168.10.0/24 allow
-	access-control: 192.168.20.0/24 allow
 
 	chroot: "/var/unbound"
 	directory: "/var/unbound/etc"
@@ -32,12 +30,6 @@ server:
 	local-data-ptr: "192.168.10.1	alixgate.home"
 
 {% for host, info in home_inventory.iteritems() %}
-	local-data: "{{ host }}.home.	1800 IN A {{ info.address }}"
-	local-data-ptr: "{{ info.address }}	{{ host }}.home"
-
-{% endfor %}
-
-{% for host, info in guest_inventory.iteritems() %}
 	local-data: "{{ host }}.home.	1800 IN A {{ info.address }}"
 	local-data-ptr: "{{ info.address }}	{{ host }}.home"
 

@@ -15,7 +15,7 @@
 - name: Add dhcpd service to rc.conf.local
   lineinfile:
     dest: /etc/rc.conf.local
-    line: 'dhcpd_flags="re1 re2"'
+    line: 'dhcpd_flags="re1"'
     regexp: '^dhcpd_flags='
     backup: yes
     state: present
